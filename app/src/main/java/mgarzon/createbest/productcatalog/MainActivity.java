@@ -1,13 +1,11 @@
 package mgarzon.createbest.productcatalog;
 
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.google.firebase.database.DataSnapshot;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText editTextName;
@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewProducts;
 
     List<Product> products;
+
+    //private DatabaseReference databaseProducts;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
         buttonAddProduct = (Button) findViewById(R.id.addButton);
 
         products = new ArrayList<>();
+
+
 
         //adding an onclicklistener to button
         buttonAddProduct.setOnClickListener(new View.OnClickListener() {

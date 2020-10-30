@@ -10,12 +10,20 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseError;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.firebase.database.DataSnapshot;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Product> products;
 
-    //private DatabaseReference databaseProducts;
+    DatabaseReference databaseProducts;
 
 
     @Override
@@ -40,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddProduct = (Button) findViewById(R.id.addButton);
 
         products = new ArrayList<>();
-
+        databaseProducts = FirebaseDatabase.getInstance().getReference("products");
 
 
         //adding an onclicklistener to button
@@ -110,9 +118,14 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
     }
 
-    private void deleteProduct(String id) {
+    private boolean deleteProduct(String id) {
 
-        Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+        // getting the specified product reference
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Products").child(id);
+        // removing product
+        dR.removeValue();
+        Toast.makeText(getApplicationContext(), "Product Deleted", Toast.LENGTH_LONG).show();
+        return true;
     }
 
     private void addProduct() {

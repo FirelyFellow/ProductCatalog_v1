@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity{
 
         products = new ArrayList<>();
 
-
-
         //adding an onclicklistener to button
         buttonAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
              public void onCancelled(@NonNull DatabaseError error) {
 
              }
-         })
+         });
     }
 
 
@@ -145,9 +143,25 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private void addProduct() {
-        String name = editTextName.getText().ToString().trim();
+        String name = editTextName.getText().toString().trim();
+        String priceStr = editTextPrice.getText().toString().trim();
 
+        if (TextUtils.isEmpty(name)){
+            Toast.makeText(this, "Please enter a name", Toast.LENGTH_LONG).show();
+        }
+        else if(TextUtils.isEmpty(priceStr)){
+            Toast.makeText(this, "Please enter a price", Toast.LENGTH_LONG).show();
+        }
+        else{
+            double price = Double.parseDouble(priceStr);
+            String id = databaseProducts.push().getKey();
 
-        Toast.makeText(this, "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
+            Product product = new Product(id, name, price);
+
+            databaseProducts.child(id).setValue(product);
+
+            editTextName.setText("");
+            editTextPrice.setText("");
+        }
     }
 }

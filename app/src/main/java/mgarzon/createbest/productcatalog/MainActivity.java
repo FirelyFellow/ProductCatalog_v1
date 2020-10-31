@@ -1,8 +1,6 @@
 package mgarzon.createbest.productcatalog;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +8,26 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+import java.lang.String;
 
-import com.google.firebase.FirebaseError;
 import com.google.firebase.database.DataSnapshot;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
+//import com.google.firebase.database.DataSnapshot;
 
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     EditText editTextName;
     EditText editTextPrice;
@@ -33,11 +35,12 @@ public class MainActivity extends AppCompatActivity {
     ListView listViewProducts;
 
     List<Product> products;
-
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference databaseProducts;
 
+    //private DatabaseReference databaseProducts;
 
-    @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -48,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         buttonAddProduct = (Button) findViewById(R.id.addButton);
 
         products = new ArrayList<>();
-        databaseProducts = FirebaseDatabase.getInstance().getReference("products");
+
 
 
         //adding an onclicklistener to button
@@ -67,12 +70,30 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        databaseProducts = FirebaseDatabase.getInstance().getReference("products");
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
+         databaseProducts.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                 products.clear();
+                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                     Product product = postSnapshot.getValue(Product.class);
+                     products.add(product);
+                 }
+                 ProductList productsAdapter = new ProductList(MainActivity.this, products);
+                 listViewProducts.setAdapter(productsAdapter);
+             }
+
+             @Override
+             public void onCancelled(@NonNull DatabaseError error) {
+
+             }
+         })
     }
 
 
@@ -118,17 +139,14 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
     }
 
-    private boolean deleteProduct(String id) {
+    private void deleteProduct(String id) {
 
-        // getting the specified product reference
-        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Products").child(id);
-        // removing product
-        dR.removeValue();
-        Toast.makeText(getApplicationContext(), "Product Deleted", Toast.LENGTH_LONG).show();
-        return true;
+        Toast.makeText(getApplicationContext(), "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
     }
 
     private void addProduct() {
+        String name = editTextName.getText().ToString().trim();
+
 
         Toast.makeText(this, "NOT IMPLEMENTED YET", Toast.LENGTH_LONG).show();
     }
